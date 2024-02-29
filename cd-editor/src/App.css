@@ -1,38 +1,84 @@
-.App {
-  text-align: center;
+.homePageWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    height: 100vh;
+}
+.formWrapper{
+    background-color: #021a40;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+footer{
+    position: fixed;
+    bottom: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+footer a{
+    color: rgb(0, 212, 212);
+    transition: all ease-in 0.1s;
+}
+footer a:hover{
+    color: rgb(2, 255, 255);
+    text-shadow: 5px 5px 50px rgb(0, 255, 255);;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.inputGroup{
+    display: flex;
+    flex-direction: column;
+}
+.mainLabel{
+    margin-bottom: 20px;
+    margin-top: 0;
 }
 
-.App-link {
-  color: #61dafb;
+.homePageLogo{
+    height: 60px;
+    margin-bottom: 30px;
+}
+.inputBox{
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    margin-bottom: 10px;
+    background: rgb(238, 238, 238);
+    font-size: 16px;
+    font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn{
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    
+}
+.joinBtn{
+    background-color: rgb(0, 212, 212);
+    width: 100px;
+    margin-left: auto;
+}
+.joinBtn:hover{
+    background-color: rgb(1, 255, 255);
+}
+.createInfo{
+    margin-top: 15px;
+    text-align: center;
+}
+
+.createNewBtn{
+    color:rgb(0, 212, 212);
+    text-decoration: none;
+}
+.createNewBtn:hover{
+    color: rgb(1, 255, 255);
+    /* text-decoration:underline; */
+    border-bottom: 1px solid rgb(1, 255, 255);
 }
