@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import {v4 as uuidV4} from 'uuid';
 import toast from 'react-hot-toast';
 
+import { useNavigate } from 'react-router-dom';
+
 function Home(){
+    const navigate = useNavigate();
     const [roomID, setRoomId] = useState('');
     const [userName, setUserName] = useState('');
     
@@ -17,6 +20,27 @@ function Home(){
         toast.success('Room Created')
     };
 
+    const joinRoom = () =>{
+        if(!roomID || !userName){
+            toast.error('Room ID and Username is required');
+            return;
+        }
+
+        //redirect
+        navigate(`/editor/${roomID}`,{
+            state:{
+                //This will help us to get the username to the editors page.
+                userName,
+            },
+        });
+    };
+
+    const handleInputEnter = (e) =>{
+        //Enter to click join button
+        if(e.code === "Enter"){
+            joinRoom();
+        }
+    }
     
     return(
         <div className="homePageWrapper">
@@ -29,11 +53,11 @@ function Home(){
 
                 <div className="inputGroup">
 
-                    <input type="text" className="inputBox" value={roomID} onChange={(e)=>setRoomId(e.target.value)} placeholder="ROOM ID" />
+                    <input type="text" onKeyUp={handleInputEnter} className="inputBox" value={roomID} onChange={(e)=>setRoomId(e.target.value)} placeholder="ROOM ID" />
 
-                    <input type="text" className="inputBox" value={userName} onChange={(e)=>setUserName(e.target.value)} placeholder="USER NAME" />
+                    <input type="text" onKeyUp={handleInputEnter} className="inputBox" value={userName} onChange={(e)=>setUserName(e.target.value)} placeholder="USER NAME" />
 
-                    <button className="btn joinBtn">Join</button>
+                    <button onClick={joinRoom} className="btn joinBtn">Join</button>
 
                     <span className="createInfo">
 
