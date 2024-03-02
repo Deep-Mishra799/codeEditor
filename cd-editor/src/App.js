@@ -9,7 +9,14 @@ function App() {
   return (
     <>
       <div>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" 
+               toastOptions={{
+                success : {
+                  iconTheme : {
+                    primary:'#00d4d4',
+                  },
+                },
+               }}/>
       </div>
     {/* //BrowserRouter will help us to wrap the entire website in it */}
     <BrowserRouter>

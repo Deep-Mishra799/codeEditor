@@ -6,17 +6,18 @@ import toast from 'react-hot-toast';
 function Home(){
     const [roomID, setRoomId] = useState('');
     const [userName, setUserName] = useState('');
-
+    
     const createNewRoom = (e) =>{
-
+        
         e.preventDefault();
-
+        
         const id = uuidV4();
         setRoomId(id);
-        toast.success('Room Created');
+
+        toast.success('Room Created')
     };
 
-
+    
     return(
         <div className="homePageWrapper">
 
