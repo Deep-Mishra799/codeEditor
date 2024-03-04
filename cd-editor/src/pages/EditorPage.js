@@ -1,14 +1,15 @@
 import React,{ useState } from "react";
-import Client from "../component/Client.js";
+import Client from '../component/Client.js';
+import Editor from "../component/Editor.js";
 
-function Editor(){
+function EditorPage(){
 
         const [clients, setClient] = useState([
-            {socketId: 1,username: "guest"},
-            {socketId: 2,username: "guest2"},
+            {socketId: 1,username: "Deep"},
+    
         ])
+
     return(
-        <>
         <div className="mainWrap">
             <div className="aside">
                 <div className="asideInner">
@@ -19,16 +20,20 @@ function Editor(){
                     <div className="clientList">
                         {
                             clients.map((client)=>(
-                                <Client />
+                                <Client key={client.socketId} username = {client.username}/>
                             ))
                         }
                     </div>
                 </div>
+                <button className="btn copyBtn">Copy Room-ID</button>
+                <button className="btn leaveBtn">Leave</button>
             </div>
-            <div className="editorWrap">main editor goes here</div>
+            <div className="editorWrap">
+                <Editor />
+            </div>
+                        
         </div>
-        </>
     )
 }
 
-export default Editor
+export default EditorPage
