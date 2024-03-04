@@ -1,11 +1,11 @@
 import React,{ useState } from "react";
-import User from "../component/User";
+import Client from "../component/Client.js";
 
 function Editor(){
 
-        const [users, setUser] = useState([
+        const [clients, setClient] = useState([
             {socketId: 1,username: "guest"},
-            {socketId: 2,username: "guest2"}
+            {socketId: 2,username: "guest2"},
         ])
     return(
         <>
@@ -18,10 +18,9 @@ function Editor(){
                     <h3>Connected</h3>
                     <div className="clientList">
                         {
-                            users.map((user)=>{
-                                <User key={user.socketId} 
-                                        username = {user.username}/>
-                            })
+                            clients.map((client)=>(
+                                <Client />
+                            ))
                         }
                     </div>
                 </div>

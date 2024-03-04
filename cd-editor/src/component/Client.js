@@ -1,10 +1,12 @@
 import React from "react";
-import Avatar from "./Avatar.js";
+import Avatar from 'react-avatar';
 
 const Client = (username) =>{
 
+    console.log(username);
+
     return(<div className="user">
-        <Avatar />
+        <Avatar name={username} size={50} round="14px"/>
         <span className="userName">{username}</span>
     </div>);
 
