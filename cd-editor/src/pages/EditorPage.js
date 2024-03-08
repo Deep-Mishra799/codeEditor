@@ -1,13 +1,29 @@
-import React,{ useState } from "react";
+import React,{ useState,useEffect, useRef } from "react";
 import Client from '../component/Client.js';
 import Editor from "../component/Editor.js";
+import { initSocket } from "../socket.js";
+import ACTIONS from "../Action.js";
+import {useLocation} from "react-router-dom";
 
 function EditorPage(){
 
+        const socketRef = useRef(null)
+        const location = useLocation()
+
         const [clients, setClient] = useState([
             {socketId: 1,username: "Deep"},
-    
         ])
+
+        useEffect(()=>{
+            const init = async ()=>{
+                socketRef.current = await initSocket();
+                // socketRef.current.emit(ACTIONS.JOIN, {
+                //     roomID,
+                //     username : location.state?.username
+                // })
+            };
+            init();
+        },[]);
 
     return(
         <div className="mainWrap">
