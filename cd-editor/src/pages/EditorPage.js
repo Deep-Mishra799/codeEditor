@@ -11,12 +11,9 @@ function EditorPage(){
         const socketRef = useRef(null);
         const location = useLocation();
         const reactNavigator = useNavigate();
-        const params = useParams();
-        console.log(params);
+        const {roomId} = useParams();
 
-        const [clients, setClient] = useState([
-            {socketId: 1,username: "Deep"},
-        ])
+        const [clients, setClient] = useState([])
 
         useEffect(()=>{
             const init = async ()=>{
@@ -31,9 +28,24 @@ function EditorPage(){
                 }
 
                 socketRef.current.emit(ACTIONS.JOIN, {
-                    // roomId,
+                    roomId,
                     username : location.state?.username
                 })
+
+                //listning for joined event
+
+                socketRef.current.on(
+                    ACTIONS.JOINED,
+                    ({clients,username,socketId})=>{
+
+                        if(username !== location.state?.username){
+                            toast.success(`${username} JOINED THE ROOM`);
+                            console.log(`${username}`);
+                        }
+
+                        setClient(clients)
+                })
+
             };
             init();
         },[]);
