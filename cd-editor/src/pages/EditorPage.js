@@ -3,12 +3,16 @@ import Client from '../component/Client.js';
 import Editor from "../component/Editor.js";
 import { initSocket } from "../socket.js";
 import ACTIONS from "../Action.js";
-import {useLocation} from "react-router-dom";
+import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
+import toast from "react-hot-toast";
 
 function EditorPage(){
 
-        const socketRef = useRef(null)
-        const location = useLocation()
+        const socketRef = useRef(null);
+        const location = useLocation();
+        const reactNavigator = useNavigate();
+        const params = useParams();
+        console.log(params);
 
         const [clients, setClient] = useState([
             {socketId: 1,username: "Deep"},
@@ -17,13 +21,26 @@ function EditorPage(){
         useEffect(()=>{
             const init = async ()=>{
                 socketRef.current = await initSocket();
-                // socketRef.current.emit(ACTIONS.JOIN, {
-                //     roomID,
-                //     username : location.state?.username
-                // })
+                socketRef.current.on('connect_error', (err)=>handleErrors(err))
+                socketRef.current.on('connect_failed', (err)=>handleErrors(err))
+
+                function handleErrors(e){
+                    console.log('Socket error' (e))
+                    toast.error('Socket connection failed!, Try again later.')
+                    reactNavigator('/')
+                }
+
+                socketRef.current.emit(ACTIONS.JOIN, {
+                    // roomId,
+                    username : location.state?.username
+                })
             };
             init();
         },[]);
+        
+        if(!location.state){
+            return <Navigate to="/" />
+        }
 
     return(
         <div className="mainWrap">
