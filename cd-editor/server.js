@@ -37,6 +37,27 @@ io.on("connection", (socket)=>{
             })
         })
     })
+
+    //receiving codes from the client 
+    socket.on(ACTIONS.CODE_CHANGE,({roomId,code})=>{
+        
+        //sending recieved changes to client 
+
+        socket.in(roomId).emit(ACTIONS.CODE_CHANGE, {code})
+    })
+
+    socket.on('disconnecting',()=>{
+        const rooms = [...socket.rooms];
+        rooms.forEach((roomId)=>{
+
+            socket.in(roomId).emit(ACTIONS.DISCONNECTED,{
+                socketId:socket.id,
+                username: userSocketMap[socket.id],
+            })
+        })
+        delete userSocketMap[socket.id];
+        socket.leave();
+    })
 })
 
 const PORT = process.env.PORT || 5000;

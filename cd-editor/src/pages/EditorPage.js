@@ -5,6 +5,7 @@ import { initSocket } from "../socket.js";
 import ACTIONS from "../Action.js";
 import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
+import { Socket } from "socket.io-client";
 
 function EditorPage(){
 
@@ -39,19 +40,52 @@ function EditorPage(){
                     ({clients,username,socketId})=>{
 
                         if(username !== location.state?.username){
-                            toast.success(`${username} JOINED THE ROOM`);
+                            toast.success(`${username} Joined the room`);
                             console.log(`${username}`);
                         }
 
                         setClient(clients)
                 })
 
+                //listning for disconnected
+                socketRef.current.on(
+                    ACTIONS.DISCONNECTED,({socketId, username})=>{
+
+                        toast.success(`${username} Left the room.`);
+                        setClient((prev)=>{
+                            return prev.filter((client)=>client.socketId !== socketId)
+                        })
+
+                    })
             };
             init();
+            return ()=>{
+                socketRef.current.disconnect();
+                socketRef.current.off(ACTIONS.JOINED);
+                socketRef.current.off(ACTIONS.DISCONNECTED);
+            }
         },[]);
+
+        const copyRoomId = async ()=>{
+            try {
+                await navigator.clipboard.writeText(roomId);
+                toast.success("Room ID has been copied");                
+            } catch (err) {
+                toast.error("Room ID copy failed")
+                console.log(err)
+            }
+        }
+
+        const leaveRoom = ()=>{
+            reactNavigator('/')
+            socketRef.current.disconnect();
+            socketRef.current.off(ACTIONS.DISCONNECTED);
+            socketRef.current.off(ACTIONS.JOINED);
+        }
         
         if(!location.state){
             return <Navigate to="/" />
+            
         }
 
     return(
@@ -70,11 +104,11 @@ function EditorPage(){
                         }
                     </div>
                 </div>
-                <button className="btn copyBtn">Copy Room-ID</button>
-                <button className="btn leaveBtn">Leave</button>
+                <button className="btn copyBtn" onClick={copyRoomId}>Copy Room-ID</button>
+                <button  className="btn leaveBtn" onClick={leaveRoom}>Leave</button>
             </div>
             <div className="editorWrap">
-                <Editor />
+                <Editor socketRef={socketRef} roomId={roomId}/>
             </div>
                         
         </div>
