@@ -6,11 +6,13 @@ import ACTIONS from "../Action.js";
 import {Navigate, useLocation, useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import { Socket } from "socket.io-client";
+import Compiler from "../component/compiler.js";
 
 function EditorPage(){
 
         const socketRef = useRef(null);
         const location = useLocation();
+        const codeRef = useRef(null)
         const reactNavigator = useNavigate();
         const {roomId} = useParams();
 
@@ -43,8 +45,11 @@ function EditorPage(){
                             toast.success(`${username} Joined the room`);
                             console.log(`${username}`);
                         }
-
                         setClient(clients)
+                        socketRef.current.emit(ACTIONS.SYNC_CODE,{
+                            code : codeRef.current,
+                            socketId
+                        })
                 })
 
                 //listning for disconnected
@@ -85,8 +90,8 @@ function EditorPage(){
         
         if(!location.state){
             return <Navigate to="/" />
-            
         }
+        
 
     return(
         <div className="mainWrap">
@@ -108,9 +113,12 @@ function EditorPage(){
                 <button  className="btn leaveBtn" onClick={leaveRoom}>Leave</button>
             </div>
             <div className="editorWrap">
-                <Editor socketRef={socketRef} roomId={roomId}/>
-            </div>
-                        
+                <Editor socketRef={socketRef} roomId={roomId} onCodeChange = {(code)=>{
+                    codeRef.current = code
+                }}/>
+            </div>   
+            <div className="compilerWrap">   
+            </div>       
         </div>
     )
 }

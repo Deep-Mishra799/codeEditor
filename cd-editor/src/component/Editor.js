@@ -6,9 +6,10 @@ import 'codemirror/theme/dracula.css'
 import 'codemirror/addon/edit/closebrackets'
 import 'codemirror/addon/edit/closetag'
 import { Socket } from 'socket.io-client';
+import {FaPlayCircle} from 'react-icons/fa'
 import ACTIONS from '../Action';
 
-const Editor = ({socketRef, roomId}) =>{
+const Editor = ({socketRef, roomId, onCodeChange}) =>{
 
     const editorRef = useRef(null)
 
@@ -28,6 +29,7 @@ const Editor = ({socketRef, roomId}) =>{
                 console.log("changes", changes);
                 const {origin} = changes;
                 const code = instance.getValue();
+                onCodeChange(code)
                 if(origin !== 'setValue'){
                     socketRef.current.emit(ACTIONS.CODE_CHANGE,{
                         roomId,
@@ -57,9 +59,22 @@ const Editor = ({socketRef, roomId}) =>{
     },[socketRef.current]);
 
     return(
-        <textarea id='codeEditor'></textarea>
+        <div className='CEContainer'>
+            <div className='CEMain'>
+                <textarea id='codeEditor'></textarea>
+            </div>
+            <div className='CECompiler'>
+                <nav className="compiler">
+                    <select id="langSelector" className="lang">
+                        <option>Java</option>
+                        <option>C++</option>
+                        <option>Python</option>
+                    </select>
+                    <button className="compilerCode" ><FaPlayCircle style={{ fontSize: 35}}/></button>
+                </nav>
+            </div>
+        </div>
     )
-
 }
 
 export default Editor
